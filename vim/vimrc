@@ -1,0 +1,205 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+let g:tmux_navigator_no_mappings = 1
+let g:tmux_navigator_save_on_switch = 1
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'git://git.wincent.com/command-t.git'
+Plugin 'sonph/onehalf', {'rtp': 'vim/'}
+Plugin 'mileszs/ack.vim'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'itchyny/vim-gitbranch'
+Plugin 'ericcurtin/curtineincsw.vim'
+Plugin 'NLKNguyen/papercolor-theme'
+Plugin 'tpope/vim-sensible'
+Plugin 'codable/diffreview'
+Plugin 'digitaltoad/vim-pug'
+Plugin 'hynek/vim-python-pep8-indent'
+Plugin 'majutsushi/tagbar'
+Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'ycm-core/YouCompleteMe'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'Yggdroot/indentLine'
+"Plugin 'fholgado/minibufexpl.vim'
+Plugin 'thasmin/minibufexpl.vim'
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+" IndentLine - enabled by default
+let g:indentLine_enabled = 1
+
+" Grep related
+let g:ackprg = 'ag --nogroup --nocolor --column --ignore tags --ignore cscope.out'
+
+" Syntax related
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_experimental_simple_template_highlight = 1
+syntax enable
+
+" Make tmux show true color
+set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+set t_Co=256
+set background=dark
+" PaperColor Them option, this must come before colorscheme
+let g:PaperColor_Theme_Options = {
+  \   'language': {
+  \     'python': {
+  \       'highlight_builtins' : 1
+  \     },
+  \     'cpp': {
+  \       'highlight_standard_library': 1
+  \     },
+  \     'c': {
+  \       'highlight_builtins' : 1
+  \     }
+  \   }
+  \ }
+colorscheme PaperColor
+"colorscheme onehalfdark
+"colorscheme solarized
+
+:set mouse=a "enable mouse click
+set shiftwidth=4
+set tabstop=4       " tab width
+set expandtab		" Convert tab to space
+
+set nu!             " line number
+set hlsearch        " highlight search result
+set incsearch       " increamental search
+set statusline=[%F]%y%r%m%*%=[Line:%l/%L,Column:%c][%p%%]
+set laststatus=2    " always show the status line
+set ruler           " show cursor location
+set showmatch
+set smartindent
+
+" Config airline
+let g:airline_powerline_fonts = 1
+let g:airline_theme='dark'
+
+" Cscope configuration
+if has("cscope") && filereadable("/usr/bin/cscope")
+	set csprg=/usr/bin/cscope
+	set cscopequickfix=s-,c-,d-,i-,t-,e-
+	set csto=0
+	set cst
+	set nocsverb
+	" add any database in current directory
+	if filereadable("cscope.out")
+		cs add cscope.out
+	" else add database pointed to by environment
+	elseif $CSCOPE_DB != ""
+		cs add $CSCOPE_DB
+	endif
+	set csverb
+endif
+
+" Cscope key shortcut mapping
+if has("cscope")
+nmap <C-[>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-[>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-[>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-[>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-[>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-[>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-[>i :cs find i <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-[>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+nmap <C-\>s :vert scs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>g :vert scs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>c :vert scs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>t :vert scs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>e :vert scs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-\>i :vert scs find i <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-\>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
+endif
+
+" Generate meta files for cscope and ctags
+map <F5> :!cscope -Rqb<CR>:!ctags -R<CR>
+" Silver search
+noremap <F6> :Ack! <cword><space>
+" close quickfix window
+nmap <F7> :ccl<CR>
+
+let g:SrcExpl_updateTagsCmd="ctags --sort=foldcase -R"
+let g:SrcExpl_updateTagsKey="<F12>"
+
+" Trinity configuration
+nmap <F8> :TagbarToggle<CR>
+" Switch between source file and header file
+map <F9> :call CurtineIncSw()<CR>
+"nmap <F9> :ClangFormat<CR>
+
+map ; :Files<CR>
+
+" miniBufExplorer
+"let g:miniBufExplMapWindowNavArrows = 1
+"let g:miniBufExplMapWindowNavVim = 1
+" nnoremap  <silent>   <tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
+" nnoremap  <silent> <s-tab>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprevious<CR>
+nnoremap  <tab>     :bnext<CR>
+nnoremap  <s-tab>   :bprevious<CR>
+
+set wildmode=list:longest
+
+" Setup clang format
+let g:clang_format#command='clang-format-6.0'
+let g:clang_format#auto_format=1
+let g:clang_format#enable_fallback_style=0
+
+" Tell bad spaces
+:match Error /\s\+$/
+
+" Detect indent
+"augroup DetectIndent
+"   autocmd!
+"   autocmd BufReadPost *  DetectIndent
+"augroup END
+
+" Backspace fix
+set backspace=indent,eol,start
+
+" Setup YouCompleteMe
+set encoding=utf-8
+highlight Pmenu ctermfg=15 ctermbg=0 guifg=#afd7ff guibg=#3a3a3a
+"nnoremap <leader>jd :YcmCompleter GoTo<CR>
+
+" Tagbar config
+let g:tagbar_left=1
+let g:tagbar_width=50
+
+" CtrlP config
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_switch_buffer = 'et'
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+
+" Navigate between pane
+nnoremap <C-Down> <C-W><C-J>
+nnoremap <C-Up> <C-W><C-K>
+nnoremap <C-Right> <C-W><C-L>
+nnoremap <C-Left> <C-W><C-H>
+
+" Search
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>

@@ -1,2 +1,3 @@
 Some config file for quickly setting up enviroment
-# env_setting
+# collect local settings
+# install settings
