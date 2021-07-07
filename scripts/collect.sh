@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 # Collect vim, zsh and tmux configuration and prepare a commit
 
 # ZSH related configuration
