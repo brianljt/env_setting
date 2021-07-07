@@ -9,8 +9,8 @@ export ZSH="/usr/local/google/home/jintaolin/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 POWERLEVEL9K_MODE="nerdfont-complete"
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(ssh dir dir_writable vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(ssh status dir dir_writable vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
 ZSH_THEME="powerlevel9k/powerlevel9k"
 
 # Set list of themes to pick from when loading at random
@@ -114,10 +114,21 @@ alias ll='ls -lhAF'
 export PATH=/usr/local/buildtools/java/jdk/bin:$PATH
 export PATH=/usr/local/google/home/jintaolin/tool/depot_tools:$PATH
 export PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:$HOME/go/bin
+export PATH=$PATH:$HOME/script
 export PATH=$PATH:/opt/gnu-mcu-eclipse/arm-none-eabi/gcc-arm-none-eabi-9-2020-q2-update/bin
-export USE_GOMA=1
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
+# Allow zsh to work with build/envsetup.sh
+setopt +o nomatch
+
+export USE_GOMA=0
+export USE_RBE=1
+export ENABLE_RBE_BOOTSTRAP=1
+
+# Enable auto-completion for 'lunch' on zsh
+autoload bashcompinit
+bashcompinit
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
